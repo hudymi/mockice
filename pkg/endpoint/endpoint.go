@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// EndpointConfig stores endpoint configuration
 type EndpointConfig struct {
 	Name                       string
 	Methods                    []string
@@ -15,6 +16,7 @@ type EndpointConfig struct {
 	DefaultResponseContentType *string
 }
 
+// DefaultConfig generates default configuration with /hello endpoint
 func DefaultConfig() []EndpointConfig {
 	return []EndpointConfig{
 		{
@@ -28,12 +30,14 @@ type endpoint struct {
 	config EndpointConfig
 }
 
+// New creates a new endpoint from config
 func New(config EndpointConfig) *endpoint {
 	return &endpoint{
 		config: config,
 	}
 }
 
+// Handle is responsible for handling incoming requests
 func (e *endpoint) Handle(writer http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
@@ -62,6 +66,7 @@ func (e *endpoint) Handle(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
+// Name returns name of the endpoint
 func (e *endpoint) Name() string {
 	return e.config.Name
 }
