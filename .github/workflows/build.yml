@@ -1,4 +1,4 @@
-name: Post
+name: build
 on:
   push:
     branches:
