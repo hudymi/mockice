@@ -1,1 +1,1 @@
-package endpoint
+package endpoint_test
