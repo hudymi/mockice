@@ -36,7 +36,7 @@ type Endpoint struct {
 func New(config Config) *Endpoint {
 	return &Endpoint{
 		config: config,
-		log:    logrus.WithField("Endpoint", config.Name),
+		log:    logrus.WithField("endpoint", config.Name),
 	}
 }
 
