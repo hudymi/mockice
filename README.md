@@ -15,7 +15,7 @@ go get -u -v github.com/michal-hudy/mockice
 
 ## Usage
 
-To use Mockice, you can run its latest version, run its latest Docker image, or run it from sources. In each case, the service listens on port `8080` and has one endpoint - `http://localhost:8080/hello`.
+To use Mockice, you can run its latest version, run its latest Docker image, or run it from sources. In each case, by default, the service listens on port `8080` and has one endpoint - `http://localhost:8080/hello`.
 
 ### Run the latest version
 
