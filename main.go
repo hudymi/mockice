@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"io/ioutil"
+	"os"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -11,6 +12,7 @@ import (
 	"github.com/michal-hudy/mockice/pkg/endpoint"
 	"github.com/michal-hudy/mockice/pkg/log"
 	"github.com/michal-hudy/mockice/pkg/service"
+	"github.com/michal-hudy/mockice/pkg/signal"
 )
 
 type options struct {
@@ -19,8 +21,8 @@ type options struct {
 }
 
 type config struct {
-	Address                string                    `yaml:"address"`
-	EndpointsConfiguration []endpoint.EndpointConfig `yaml:"endpoints"`
+	Address                string            `yaml:"address"`
+	EndpointsConfiguration []endpoint.Config `yaml:"endpoints"`
 }
 
 func gatherOptions() options {
@@ -37,7 +39,9 @@ func main() {
 	options := gatherOptions()
 	log.Setup(options.verbose)
 
-	cfg, err := loadConfig(options)
+	ctx := signal.Context()
+
+	cfg, err := loadConfig(options.config)
 	if err != nil {
 		logrus.Fatal(err)
 	}
@@ -45,35 +49,40 @@ func main() {
 	svc := service.New(cfg.Address)
 	for _, config := range cfg.EndpointsConfiguration {
 		endpoint := endpoint.New(config)
+
 		logrus.Infof("Registering /%s endpoint", endpoint.Name())
-		svc.Register(endpoint)
+		err := svc.Register(endpoint)
+		if err != nil {
+			logrus.Fatal(err)
+		}
 	}
 
 	logrus.Infof("Service listen at %s", cfg.Address)
-	err = svc.Start()
+	err = svc.Start(ctx)
 	if err != nil {
 		logrus.Error(err)
+		os.Exit(1)
 	}
 }
 
-func loadConfig(ops options) (config, error) {
+func loadConfig(path string) (config, error) {
 	cfg := config{
 		Address: ":8080",
 	}
 
-	if ops.config == "" {
+	if path == "" {
 		cfg.EndpointsConfiguration = endpoint.DefaultConfig()
 		return cfg, nil
 	}
 
-	content, err := ioutil.ReadFile(ops.config)
+	content, err := ioutil.ReadFile(path)
 	if err != nil {
-		return config{}, errors.Wrapf(err, "while reading configuration from %s", ops.config)
+		return config{}, errors.Wrapf(err, "while reading configuration from %s", path)
 	}
 
 	err = yaml.Unmarshal(content, &cfg)
 	if err != nil {
-		return config{}, errors.Wrapf(err, "while loading configuration from %s", ops.config)
+		return config{}, errors.Wrapf(err, "while loading configuration from %s", path)
 	}
 
 	return cfg, nil

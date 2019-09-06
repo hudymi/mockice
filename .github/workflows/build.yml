@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: go build -v .
     - name: Test
-      run: go test ./...
+      run: go test ./... -cover
   build-docker:
     name: Build Docker image
     runs-on: ubuntu-latest

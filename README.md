@@ -64,14 +64,14 @@ address: :8080
 # The list of endpoints
 endpoints:
 - name: hello # Name of the endpoint
-  # The list of valid methods
+  # The list of valid methods, if not set validation is skipped
   methods:
   - GET
   - POST
   # Default HTTP response code, if not provided 200
   defaultResponseCode: 200
   # Default response content
-  defaultResponseContent: "# Sample service"  
+  defaultResponseContent: "Sample service"  
   # Default response content-type, if not provided "text/plain; charset=utf-8"
   defaultResponseContentType: text/plain; charset=utf-8
 
