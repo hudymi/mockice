@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/michal-hudy/mockice/workflows/build/badge.svg)](https://github.com/michal-hudy/mockice/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/michal-hudy/mockice/actions)](https://goreportcard.com/report/github.com/michal-hudy/mockice/actions)
 
-Mockice is a simple HTTP service that provides configurable endpoints. It can be used for testing or serving a static content.
+Mockice is a simple HTTP service that provides configurable endpoints. Use it for testing or serving static content.
 
 ## Installation
 
@@ -15,50 +15,46 @@ go get -u -v github.com/michal-hudy/mockice
 
 ## Usage
 
-### Run latest version
+To use Mockice, you can run its latest version, run its latest Docker image, or run it from sources. In each case, the service listens on port `8080` and has one endpoint - `http://localhost:8080/hello`.
 
-To run latest version, install a Mockice with command from [Installation](#Installation) section and run:
+### Run the latest version
+
+To run Mockice latest version, install Mockice with the command from the [Installation](#Installation) section and run:
 
 ```bash
 mockice --verbose
 ```
 
-The service listens on port `8080` and has one endpoint `http://localhost:8080/hello`
-
 ### Run a Docker image
 
-To run Mockice latest Docker image, run:
+To run Mockice latest Docker image, use the following command:
 
 ```bash
 docker run -p 8080:8080 hudymi/mockice:latest --verbose
 ```
 
-The service listens on port `8080` and has one endpoint `http://localhost:8080/hello`
-
 ### Run from sources
 
-To run Mockice from sources, run:
+To run Mockice from sources, use the following command:
 
 ```bash
 GO111MODULE=on go run main.go --verbose
-``` 
-
-The service listens on port `8080` and has one endpoint `http://localhost:8080/hello`
+```
 
 ### Command line parameters
 
-You can use the following parameters:
+The table contains the command line parameters available for the service:
 
 | Name | Description | Default Value |
 | ---- | ----------- | ------------- |
-| `--config` | Path to the configuration file. If not provided the default configuration will be used. | |
-| `--verbose` | Enable verbose logging | `false` |
+| `--config` | A path to the configuration file. If not provided, the default configuration is used. | |
+| `--verbose` | Enables verbose logging. | `false` |
 
 ## Configuration
 
-By default Mockice listens on every interfaces on port `8080` and has one endpoint `http://localhost:8080/hello`. If configuration is provided then default endpoint is disabled.
+By default, in every interface Mockice listens on port `8080` and has one endpoint - `http://localhost:8080/hello`. If you provide any configuration, the default endpoint is disabled.
 
-Configuration file must be in `yaml` format and for up-to-date list of available fields see [config](main.go) structure.
+The configuration file must be in the `yaml` format. See the [config](main.go) structure for the up-to-date list of the available fields.
 
 ### File structure
 
@@ -73,7 +69,7 @@ endpoints:
   - GET
   - POST
   # Default HTTP response code, if not provided 200
-  defaultResponseCode: 200 
+  defaultResponseCode: 200
   # Default response content
   defaultResponseContent: "# Sample service"  
   # Default response content-type, if not provided "text/plain; charset=utf-8"
