@@ -9,11 +9,11 @@ import (
 
 // Config stores endpoint configuration
 type Config struct {
-	Name                       string
-	Methods                    []string
-	DefaultResponseCode        *int
-	DefaultResponseContent     string
-	DefaultResponseContentType *string
+	Name                       string   `yaml:"name"`
+	Methods                    []string `yaml:"methods"`
+	DefaultResponseCode        *int     `yaml:"defaultResponseCode"`
+	DefaultResponseContent     string   `yaml:"defaultResponseContent"`
+	DefaultResponseContentType *string  `yaml:"defaultResponseContentType"`
 }
 
 // DefaultConfig generates default configuration with /hello endpoint
