@@ -2,16 +2,17 @@ package main
 
 import (
 	"flag"
-	"github.com/michal-hudy/mockice/pkg/signal"
+	"io/ioutil"
+	"os"
+
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"os"
 
 	"github.com/michal-hudy/mockice/pkg/endpoint"
 	"github.com/michal-hudy/mockice/pkg/log"
 	"github.com/michal-hudy/mockice/pkg/service"
+	"github.com/michal-hudy/mockice/pkg/signal"
 )
 
 type options struct {

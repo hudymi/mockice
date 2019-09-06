@@ -1,11 +1,12 @@
 package log_test
 
 import (
-	"github.com/michal-hudy/mockice/pkg/log"
-	"github.com/sirupsen/logrus"
 	"testing"
 
 	. "github.com/onsi/gomega"
+	"github.com/sirupsen/logrus"
+
+	"github.com/michal-hudy/mockice/pkg/log"
 )
 
 func TestSetup(t *testing.T) {

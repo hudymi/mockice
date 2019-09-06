@@ -3,10 +3,11 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
+
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 type mux interface {

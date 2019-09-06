@@ -2,12 +2,13 @@ package service_test
 
 import (
 	"context"
-	"github.com/michal-hudy/mockice/pkg/endpoint"
-	"github.com/michal-hudy/mockice/pkg/service"
 	"sync"
 	"testing"
 
 	. "github.com/onsi/gomega"
+
+	"github.com/michal-hudy/mockice/pkg/endpoint"
+	"github.com/michal-hudy/mockice/pkg/service"
 )
 
 func TestService_Start(t *testing.T) {
