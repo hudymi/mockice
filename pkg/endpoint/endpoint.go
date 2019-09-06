@@ -7,8 +7,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// EndpointConfig stores endpoint configuration
-type EndpointConfig struct {
+// Config stores endpoint configuration
+type Config struct {
 	Name                       string
 	Methods                    []string
 	DefaultResponseCode        *int
@@ -17,8 +17,8 @@ type EndpointConfig struct {
 }
 
 // DefaultConfig generates default configuration with /hello endpoint
-func DefaultConfig() []EndpointConfig {
-	return []EndpointConfig{
+func DefaultConfig() []Config {
+	return []Config{
 		{
 			Name:                   "hello",
 			DefaultResponseContent: "Hello World! Mockice here!",
@@ -26,24 +26,28 @@ func DefaultConfig() []EndpointConfig {
 	}
 }
 
-type endpoint struct {
-	config EndpointConfig
+// Endpoint is a structure responsible for handling HTTP requests
+type Endpoint struct {
+	config Config
+	log    *logrus.Entry
 }
 
 // New creates a new endpoint from config
-func New(config EndpointConfig) *endpoint {
-	return &endpoint{
+func New(config Config) *Endpoint {
+	return &Endpoint{
 		config: config,
+		log:    logrus.WithField("Endpoint", config.Name),
 	}
 }
 
 // Handle is responsible for handling incoming requests
-func (e *endpoint) Handle(writer http.ResponseWriter, request *http.Request) {
+func (e *Endpoint) Handle(writer http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
+	e.log.Infof("Handle %s request from %s", request.Method, request.RemoteAddr)
 
 	if len(e.config.Methods) > 0 && !e.contains(e.config.Methods, request.Method) {
 		http.Error(writer, "Invalid request method", http.StatusMethodNotAllowed)
-		logrus.Errorf("Invalid request method %s", request.Method)
+		e.log.Errorf("Invalid request method %s", request.Method)
 		return
 	}
 
@@ -53,25 +57,25 @@ func (e *endpoint) Handle(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	}
 
-	_, err := writer.Write([]byte(e.config.DefaultResponseContent))
-	if err != nil {
-		err = errors.Wrapf(err, "while writing response from /%s endpoint", e.config.Name)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		logrus.Error(err)
-		return
-	}
-
 	if e.config.DefaultResponseCode != nil {
 		writer.WriteHeader(*e.config.DefaultResponseCode)
+	}
+
+	_, err := writer.Write([]byte(e.config.DefaultResponseContent))
+	if err != nil {
+		err = errors.Wrapf(err, "while writing response")
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		e.log.Error(err)
+		return
 	}
 }
 
 // Name returns name of the endpoint
-func (e *endpoint) Name() string {
+func (e *Endpoint) Name() string {
 	return e.config.Name
 }
 
-func (e *endpoint) contains(values []string, value string) bool {
+func (e *Endpoint) contains(values []string, value string) bool {
 	for _, item := range values {
 		if item == value {
 			return true
