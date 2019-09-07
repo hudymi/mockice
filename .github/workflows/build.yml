@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: go build -v .
     - name: Test
-      run: go test ./... -cover
+      run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
   build-docker:
     name: Build Docker image
     runs-on: ubuntu-latest
