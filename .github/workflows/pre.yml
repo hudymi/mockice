@@ -18,7 +18,13 @@ jobs:
     - name: Build
       run: go build -v .
     - name: Test
-      run: go test ./... -cover
+      run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.0.2
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.txt
+        flags: unittests
   build-docker:
     name: Build Docker image
     runs-on: ubuntu-latest
