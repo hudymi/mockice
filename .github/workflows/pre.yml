@@ -20,11 +20,9 @@ jobs:
     - name: Test
       run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1.0.2
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
-        file: ./coverage.txt
-        flags: unittests
+      run: bash <(curl -s https://codecov.io/bash)
+      env:
+        CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
   build-docker:
     name: Build Docker image
     runs-on: ubuntu-latest
