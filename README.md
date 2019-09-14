@@ -74,5 +74,7 @@ endpoints:
   defaultResponseContent: "Sample service"  
   # Default response content-type, if not provided "text/plain; charset=utf-8"
   defaultResponseContentType: text/plain; charset=utf-8
+  # Path to the file that is returned by default, if provided then defaultResponseContent is ignored
+  defaultResponseFile: "mockice/index.html"
 
 ```

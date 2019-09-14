@@ -1,7 +1,11 @@
 package endpoint
 
 import (
+	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -14,6 +18,7 @@ type Config struct {
 	DefaultResponseCode        *int     `yaml:"defaultResponseCode"`
 	DefaultResponseContent     string   `yaml:"defaultResponseContent"`
 	DefaultResponseContentType *string  `yaml:"defaultResponseContentType"`
+	DefaultResponseFile        *string  `yaml:"defaultResponseFile"`
 }
 
 // DefaultConfig generates default configuration with /hello endpoint
@@ -51,23 +56,50 @@ func (e *Endpoint) Handle(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	if e.config.DefaultResponseContentType != nil {
-		writer.Header().Set("Content-Type", *e.config.DefaultResponseContentType)
+	writer.Header().Set("Content-Type", e.defaultContentType())
+
+	var reader io.ReadCloser
+	if e.config.DefaultResponseFile != nil {
+		file, err := e.fileReader(writer)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			e.log.Error(err)
+			return
+		}
+
+		reader = file
 	} else {
-		writer.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		reader = ioutil.NopCloser(strings.NewReader(e.config.DefaultResponseContent))
 	}
+	defer reader.Close()
 
 	if e.config.DefaultResponseCode != nil {
 		writer.WriteHeader(*e.config.DefaultResponseCode)
 	}
 
-	_, err := writer.Write([]byte(e.config.DefaultResponseContent))
+	_, err := io.Copy(writer, reader)
 	if err != nil {
 		err = errors.Wrapf(err, "while writing response")
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		e.log.Error(err)
 		return
 	}
+}
+
+func (e *Endpoint) defaultContentType() string {
+	if e.config.DefaultResponseContentType != nil {
+		return *e.config.DefaultResponseContentType
+	}
+	return "text/plain; charset=utf-8"
+}
+
+func (e *Endpoint) fileReader(writer io.Writer) (io.ReadCloser, error) {
+	file, err := os.Open(*e.config.DefaultResponseFile)
+	if err != nil {
+		return nil, errors.Wrapf(err, "while opening file %s", *e.config.DefaultResponseFile)
+	}
+
+	return file, nil
 }
 
 // Name returns name of the endpoint

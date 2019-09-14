@@ -3,6 +3,7 @@ package endpoint_test
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -105,6 +106,37 @@ func TestEndpoint_Handle(t *testing.T) {
 				DefaultResponseCode:    intPointer(http.StatusNotModified),
 			},
 		},
+		"With file": {
+			method:               http.MethodGet,
+			expectedResponseCode: http.StatusOK,
+			config: endpoint.Config{
+				Name:                       "simple",
+				DefaultResponseCode:        intPointer(http.StatusOK),
+				DefaultResponseContentType: stringPointer("text/markdown; charset=utf-8"),
+				DefaultResponseFile:        stringPointer("testdata/test.md"),
+			},
+		},
+		"With file and content": {
+			method:               http.MethodGet,
+			expectedResponseCode: http.StatusOK,
+			config: endpoint.Config{
+				Name:                       "simple",
+				DefaultResponseContent:     "test",
+				DefaultResponseCode:        intPointer(http.StatusOK),
+				DefaultResponseContentType: stringPointer("text/markdown; charset=utf-8"),
+				DefaultResponseFile:        stringPointer("testdata/test.md"),
+			},
+		},
+		"With not existing file": {
+			method:               http.MethodGet,
+			expectedResponseCode: http.StatusInternalServerError,
+			config: endpoint.Config{
+				Name:                       "simple",
+				DefaultResponseCode:        intPointer(http.StatusOK),
+				DefaultResponseContentType: stringPointer("text/markdown; charset=utf-8"),
+				DefaultResponseFile:        stringPointer("testdata/test.md.fail"),
+			},
+		},
 	} {
 		t.Run(testName, func(t *testing.T) {
 			// Given
@@ -133,9 +165,24 @@ func TestEndpoint_Handle(t *testing.T) {
 
 			buff := new(bytes.Buffer)
 			buff.ReadFrom(recorder.Result().Body)
-			g.Expect(buff.String()).To(Equal(testCase.config.DefaultResponseContent))
+			if testCase.config.DefaultResponseFile == nil {
+				g.Expect(buff.String()).To(Equal(testCase.config.DefaultResponseContent))
+			} else {
+				content, err := readFile(*testCase.config.DefaultResponseFile)
+				g.Expect(err).To(Succeed())
+				g.Expect(buff.String()).To(Equal(content))
+			}
 		})
 	}
+}
+
+func readFile(path string) (string, error) {
+	content, err := ioutil.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+
+	return string(content), nil
 }
 
 func stringPointer(value string) *string {
