@@ -12,10 +12,7 @@ func init() {
 func Setup(verbose bool) {
 	if verbose {
 		log.SetLevel(log.InfoLevel)
-		
 	} else {
 		log.SetLevel(log.WarnLevel)
-
 	}
-
 }
