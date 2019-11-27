@@ -20,7 +20,7 @@ jobs:
     - name: Test
       run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
     - name: CodeCov
-      run: bash <(curl -s https://codecov.io/bash)
+      run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
   build-docker:
     name: Build Docker image
     runs-on: ubuntu-latest
