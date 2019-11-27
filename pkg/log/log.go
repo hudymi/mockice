@@ -15,6 +15,7 @@ func Setup(verbose bool) {
 		
 	} else {
 		log.SetLevel(log.WarnLevel)
+
 	}
 
 }
