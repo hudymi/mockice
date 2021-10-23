@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/michal-hudy/mockice/pkg/signal"
+	"github.com/hudymi/mockice/pkg/signal"
 
 	. "github.com/onsi/gomega"
 )

@@ -6,7 +6,7 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/sirupsen/logrus"
 
-	"github.com/michal-hudy/mockice/pkg/log"
+	"github.com/hudymi/mockice/pkg/log"
 )
 
 func TestSetup(t *testing.T) {

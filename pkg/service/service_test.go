@@ -7,8 +7,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"github.com/michal-hudy/mockice/pkg/endpoint"
-	"github.com/michal-hudy/mockice/pkg/service"
+	"github.com/hudymi/mockice/pkg/endpoint"
+	"github.com/hudymi/mockice/pkg/service"
 )
 
 func TestService_Start(t *testing.T) {

@@ -9,10 +9,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 
-	"github.com/michal-hudy/mockice/pkg/endpoint"
-	"github.com/michal-hudy/mockice/pkg/log"
-	"github.com/michal-hudy/mockice/pkg/service"
-	"github.com/michal-hudy/mockice/pkg/signal"
+	"github.com/hudymi/mockice/pkg/endpoint"
+	"github.com/hudymi/mockice/pkg/log"
+	"github.com/hudymi/mockice/pkg/service"
+	"github.com/hudymi/mockice/pkg/signal"
 )
 
 type options struct {

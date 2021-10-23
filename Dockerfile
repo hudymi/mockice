@@ -21,7 +21,7 @@ FROM alpine:latest as certs
 RUN apk --update add ca-certificates
 
 FROM scratch
-LABEL source = git@github.com:michal-hudy/mockice.git
+LABEL source = git@github.com:hudymi/mockice.git
 WORKDIR /
 COPY --from=builder /workspace/service .
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
