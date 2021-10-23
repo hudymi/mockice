@@ -1,6 +1,7 @@
 # Mockice
 
-[![Build Status](https://github.com/hudymi/mockice/workflows/build/badge.svg)](https://github.com/hudymi/mockice/actions)
+
+[![CI](https://github.com/hudymi/mockice/workflows/build/badge.svg?branch=master)](https://github.com/hudymi/mockice/actions?query=branch:master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hudymi/mockice/actions)](https://goreportcard.com/report/github.com/hudymi/mockice/actions)
 
 Mockice is a simple HTTP service that provides configurable endpoints. Use it for testing or serving static content.
