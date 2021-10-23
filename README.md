@@ -1,7 +1,7 @@
 # Mockice
 
-[![Build Status](https://github.com/michal-hudy/mockice/workflows/build/badge.svg)](https://github.com/michal-hudy/mockice/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/michal-hudy/mockice/actions)](https://goreportcard.com/report/github.com/michal-hudy/mockice/actions)
+[![Build Status](https://github.com/hudymi/mockice/workflows/build/badge.svg)](https://github.com/michal-hudy/mockice/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/hudymi/mockice/actions)](https://goreportcard.com/report/github.com/hudymi/mockice/actions)
 
 Mockice is a simple HTTP service that provides configurable endpoints. Use it for testing or serving static content.
 
@@ -10,7 +10,7 @@ Mockice is a simple HTTP service that provides configurable endpoints. Use it fo
 To install Mockice, run:
 
 ```bash
-go get -u -v github.com/michal-hudy/mockice
+go get -u -v github.com/hudymi/mockice
 ```
 
 ## Usage
